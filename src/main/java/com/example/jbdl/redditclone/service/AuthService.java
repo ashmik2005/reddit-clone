@@ -1,5 +1,7 @@
 package com.example.jbdl.redditclone.service;
 
+import com.example.jbdl.redditclone.dto.AuthenticationResponse;
+import com.example.jbdl.redditclone.dto.LoginRequest;
 import com.example.jbdl.redditclone.dto.RegisterRequest;
 import com.example.jbdl.redditclone.exception.SpringRedditException;
 import com.example.jbdl.redditclone.model.NotificationEmail;
@@ -7,8 +9,13 @@ import com.example.jbdl.redditclone.model.User;
 import com.example.jbdl.redditclone.model.VerificationToken;
 import com.example.jbdl.redditclone.repository.UserRepository;
 import com.example.jbdl.redditclone.repository.VerificationTokenRepository;
+import com.example.jbdl.redditclone.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +33,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
 
     @Transactional
@@ -83,5 +92,26 @@ public class AuthService {
         );
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        // Implement the logic to authenticate user
+        /*
+        * Create UsernamePasswordAuthenticationToken
+        * Use authenticationManager to perform login
+        * */
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword())
+        );
+
+
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+        // Create JWTs and send it as a response to the client
+        String token = jwtProvider.generateToken(authenticate);
+
+        // Send it back to the client using DTO
+        return new AuthenticationResponse(token, loginRequest.getUsername());
     }
 }
