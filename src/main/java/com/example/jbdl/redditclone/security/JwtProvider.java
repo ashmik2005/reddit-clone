@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+import static io.jsonwebtoken.Jwts.parser;
+
 @Service
 @RequiredArgsConstructor
 public class JwtProvider {
@@ -41,3 +43,4 @@ public class JwtProvider {
     }
 
 }
+

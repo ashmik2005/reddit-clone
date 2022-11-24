@@ -100,6 +100,7 @@ public class AuthService {
         * Create UsernamePasswordAuthenticationToken
         * Use authenticationManager to perform login
         * */
+        System.out.println("Hits login");
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword())
