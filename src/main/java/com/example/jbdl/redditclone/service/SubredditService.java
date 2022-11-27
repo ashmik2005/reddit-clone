@@ -1,6 +1,7 @@
 package com.example.jbdl.redditclone.service;
 
 import com.example.jbdl.redditclone.dto.SubredditDto;
+import com.example.jbdl.redditclone.exception.SpringRedditException;
 import com.example.jbdl.redditclone.model.Subreddit;
 import com.example.jbdl.redditclone.repository.SubredditRepository;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,15 @@ public class SubredditService {
                 .stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
+    }
+
+    public SubredditDto getSubreddit(Long id) {
+        Subreddit subreddit = subredditRepository.findById(id).orElseThrow(
+                () -> new SpringRedditException("Subreddit not found with id = " + id)
+        );
+
+        return mapToDto(subreddit);
+
     }
 
     private Subreddit mapSubredditDto(SubredditDto subredditDto) {

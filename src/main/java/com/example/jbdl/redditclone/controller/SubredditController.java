@@ -29,4 +29,9 @@ public class SubredditController {
         return new ResponseEntity<>(subredditService.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SubredditDto> getSubreddit(@PathVariable(value = "id") Long id){
+        return new ResponseEntity<>(subredditService.getSubreddit(id), HttpStatus.OK);
+    }
+
 }
