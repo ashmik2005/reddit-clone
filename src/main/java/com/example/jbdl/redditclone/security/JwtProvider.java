@@ -59,6 +59,7 @@ public class JwtProvider {
             Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token);
             return true;
         } catch(Exception e) {
+            // TODO: Add more meaningful exceptions for easier debugging
             throw new SpringRedditException("Something went wring with JWT validation");
         }
     }

@@ -34,4 +34,6 @@ public class SubredditController {
         return new ResponseEntity<>(subredditService.getSubreddit(id), HttpStatus.OK);
     }
 
+
+
 }

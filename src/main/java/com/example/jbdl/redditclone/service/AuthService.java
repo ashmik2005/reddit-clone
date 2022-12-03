@@ -10,6 +10,7 @@ import com.example.jbdl.redditclone.model.VerificationToken;
 import com.example.jbdl.redditclone.repository.UserRepository;
 import com.example.jbdl.redditclone.repository.VerificationTokenRepository;
 import com.example.jbdl.redditclone.security.JwtProvider;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +63,14 @@ public class AuthService {
                 "http://localhost:8080/api/auth/accountVerification/" + token));
 
     }
+
+    @Transactional(readOnly = true)
+    public User getCurrentUser(){
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new SpringRedditException("User not found with username = " + username));
+     }
 
     private String generateVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
