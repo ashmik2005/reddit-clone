@@ -18,7 +18,7 @@ import java.time.Instant;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long commentId;
+    private Long id;
 
     @NotEmpty(message = "Comment cannot be blank")
     private String text;
