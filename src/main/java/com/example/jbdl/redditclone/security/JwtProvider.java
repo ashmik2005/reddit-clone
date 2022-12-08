@@ -31,8 +31,8 @@ public class JwtProvider {
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
-        Date currentDate = new Date();
-        Date expirationDate = new Date(currentDate.getTime() + jwtExpirationInMillis);
+        Date currentDate = Date.from(Instant.now());
+        Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
 
         String token = Jwts.builder()
                 .setSubject(username)
@@ -43,6 +43,15 @@ public class JwtProvider {
 
         return token;
 
+    }
+
+    public String generateTokenWithUsername(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationInMillis)))
+                .signWith(SignatureAlgorithm.HS512, jwtSecretKey)
+                .compact();
     }
 
     public String getUsernameFromToken(String token) {
