@@ -25,11 +25,8 @@ public class PostController {
     private final PostMapper postMapper;
 
     @PostMapping
-    // TODO: Make this return ID of post created
-    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
-
-        postService.createPost(postRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Long> createPost(@RequestBody PostRequest postRequest) {
+        return new ResponseEntity<>(postService.createPost(postRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

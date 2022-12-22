@@ -30,7 +30,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostMapper postMapper;
 
-    public void createPost(PostRequest postRequest) {
+    public Long createPost(PostRequest postRequest) {
 
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
                 .orElseThrow(() -> new SpringRedditException("Subreddit not found with name " + postRequest.getSubredditName()));
@@ -38,6 +38,7 @@ public class PostService {
 
         Post toSave = postMapper.mapToModel(postRequest, subreddit, currentUser);
         postRepository.save(toSave);
+        return toSave.getPostId();
     }
 
     public PostResponse getPostById(Long id){
